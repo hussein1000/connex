@@ -83,18 +83,27 @@ fun ClientUserChatScreen(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
-                    title = {
-                        Text(username!!)
-                    },
-                    actions = {
-                        AnimatedVisibility(LocalUser(uuid = UUID.fromString(chatId!!), username = username!!) in users) {
-                            Text("Online", color = Color.Green, modifier = Modifier.padding(end = 16.dp))
-                        }
-                    },
-//                    colors = TopAppBarDefaults.topAppBarColors(
-//                        containerColor = MaterialTheme.colorScheme.primaryContainer
-//                    )
-                )
+    title = { Text(username!!) },
+    actions = {
+        // Show "Online" if user is connected
+        AnimatedVisibility(LocalUser(uuid = UUID.fromString(chatId!!), username = username!!) in users) {
+            Text("Online", color = Color.Green, modifier = Modifier.padding(end = 16.dp))
+        }
+
+        // 🗑️ Delete chat button
+        IconButton(onClick = {
+            scope.launch {
+                viewModel.deleteChatHistory(chatId!!)
+            }
+        }) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete Chat",
+                tint = Color.Red
+            )
+        }
+    }
+)
             },
             bottomBar = {
                 Row(
