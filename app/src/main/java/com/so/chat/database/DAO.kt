@@ -46,10 +46,7 @@ interface MessageDao {
     @Query("SELECT * FROM messages ORDER BY timestamp ASC")
     fun getAllMessages(): Flow<List<MessageEntity>>
 
-    @Query("SELECT chatId AS uuid, contactName AS username FROM messages GROUP BY chatId")
+    @Query("select chatId as uuid, contactName as username from messages group by chatId")
     fun getAllUsers(): Flow<List<LocalUser>>
 
-    // 🗑️ Delete all messages for a specific chat
-    @Query("DELETE FROM messages WHERE chatId = :chatId")
-    suspend fun deleteMessagesByChatId(chatId: UUID)
 }
